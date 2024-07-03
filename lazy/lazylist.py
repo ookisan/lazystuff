@@ -193,6 +193,9 @@ class lazylist(collections.abc.MutableSequence):  # pylint:disable=invalid-name
 
     def __cmp__(self, other):
         """Compare two lazylists."""
+        if not isinstance(other, (list, lazylist)):
+            raise TypeError(f"comparison not supported between instances of 'lazylist' "
+                            f"and '{type(other).__name__}'")
         iter1 = enumerate(self)
         iter2 = enumerate(other)
         index1 = -1
@@ -229,25 +232,7 @@ class lazylist(collections.abc.MutableSequence):  # pylint:disable=invalid-name
         """Check if two lazylists are equivalent."""
         if not isinstance(other, (list, lazylist)):
             return False
-        index1 = index2 = None
-        iter1 = enumerate(self)
-        iter2 = enumerate(other)
-        try:
-            while True:
-                (index1, elem1) = next(iter1)
-                (index2, elem2) = next(iter2)
-                if elem1 == elem2:
-                    continue
-                return False
-        except StopIteration:
-            pass
-        # We get here on the first StopIteration
-        if index1 == index2:            # exhausted self
-            with contextlib.suppress(StopIteration):
-                next(iter2)
-                return False            # other was longer
-            return True                 # equal lengths
-        return False                    # self is longer
+        return self.__cmp__(other) == 0
 
     def __format__(self, format_spec):
         """Format a lazylist according to a format spec."""

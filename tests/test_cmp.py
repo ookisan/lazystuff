@@ -1,3 +1,5 @@
+import pytest
+
 from lazy import lazylist
 
 
@@ -9,6 +11,7 @@ def test_equal():
     assert lst1._is_strict() is True
     assert lst2._is_strict() is True
 
+
 def test_differing_elements():
     smaller = lazylist(iter([1, 1, 3, 4, 5]))
     larger = lazylist(iter([1, 2, 3, 4, 5]))
@@ -16,6 +19,7 @@ def test_differing_elements():
     assert larger.__cmp__(smaller) == 1
     assert smaller._strict == [1, 1]
     assert larger._strict == [1, 2]
+
 
 def test_differing_lengths():
     smaller = lazylist(iter([1, 2, 3]))
@@ -28,6 +32,7 @@ def test_differing_lengths():
     assert larger._strict == [1, 2, 3, 4]
     assert larger._is_strict() is False
 
+
 def test_last_element_differs():
     smaller = lazylist(iter([1, 2, 3]))
     larger = lazylist(iter([1, 2, 4]))
@@ -36,7 +41,14 @@ def test_last_element_differs():
     assert smaller._is_strict() is False
     assert larger._is_strict() is False
 
+
 def test_empty_lists():
     assert lazylist().__cmp__(lazylist()) == 0
     assert lazylist().__cmp__(lazylist([1])) == -1
     assert lazylist([1]).__cmp__(lazylist()) == 1
+
+
+def test_types_differ():
+    with pytest.raises(TypeError) as exc:
+        _ = lazylist().__cmp__('abc')
+    assert 'comparison' in str(exc)
