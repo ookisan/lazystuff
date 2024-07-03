@@ -79,3 +79,9 @@ def test_make_strict_past_end():
     act._make_strict(11)
     assert act._strict == list(range(1, 11))
     assert act._is_strict() is True
+
+
+def test_empty():
+    act = lazylist()
+    act._make_strict()
+    assert act._is_strict() is True

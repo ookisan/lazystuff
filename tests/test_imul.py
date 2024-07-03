@@ -9,3 +9,9 @@ def test_imul_basic():
     assert act is lst1
     assert act._strict == [1, 2]
     assert list(act) == [1, 2, 3, 4, 5, 6] * 3
+
+
+def test_imul_empty():
+    lst1 = lazylist()
+    lst1 *= 3
+    assert list(lst1) == []
