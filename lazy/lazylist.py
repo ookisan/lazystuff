@@ -75,7 +75,7 @@ class lazylist(collections.abc.MutableSequence[_T]):  # pylint:disable=invalid-n
 
     """
 
-    class lazylist_iterator(typing.Iterator[_T]):    # pylint:disable=invalid-name
+    class _lazylist_iterator(typing.Iterator[_T]):    # pylint:disable=invalid-name
         """Internal iterator for lazylist."""
 
         _iterable: lazylist[_T]
@@ -317,7 +317,7 @@ class lazylist(collections.abc.MutableSequence[_T]):  # pylint:disable=invalid-n
 
     def __iter__(self) -> Iterator[_T]:
         """Iterate over this lazylist."""
-        return lazylist.lazylist_iterator(self)
+        return lazylist._lazylist_iterator(self)
 
     def __le__(self, other: Any) -> bool:
         """Check if this lazylist is less than or equal to another."""
