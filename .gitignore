@@ -1,0 +1,14 @@
+/build/
+/dist/
+/*.egg-info/
+*~
+**/__pycache__/
+/deb_dist/
+lazy-*.tar.gz
+.coverage
+/tests/results.xml
+/.eggs/
+/lazy/_packaging.py
+/venv-*/
+/venv/
+/doc/_build

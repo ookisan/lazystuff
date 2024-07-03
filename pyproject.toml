@@ -1,0 +1,131 @@
+[build-system]
+requires = ["setuptools @ git+https://github.com/pypa/setuptools.git@main"]
+
+[project]
+name = "lazy"
+version = "0.1.0"
+authors = [{ name = "David Byers", email = "david.byers@liu.se"}]
+description = "Simplify cli tools with subcommands"
+readme = "README.md"
+requires-python = ">=3.9"
+keywords = ["lazy", "sequence"]
+license = { text = "AGPL-3.0-or-later" }
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Programming Language :: Python",
+    "Typing :: Untyped"
+]
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+    "Flake8-pyproject",
+    "build",
+    "flake8",
+    "pydocstyle",
+    "pylint",
+    "pytest",
+    "pytest-cov",
+    "sphinx",
+    "sphinx-rtd-theme",
+    "vulture",
+    "wheel",
+]
+
+
+
+[project.urls]
+
+
+[tool.setuptools]
+packages = ["lazy"]
+
+
+[tool.flake8]
+max-line-length = 131
+
+
+[tool.pydocstyle]
+add_ignore = "D105"
+
+
+[tool.pytest.ini_options]
+addopts = [
+    "--tb", "short",
+    "--cov", "lazy",
+    "--cov-branch",
+    "--cov-report", "term-missing",
+    "--cov-config", ".coveragerc",
+]
+testpaths = [
+    "tests"
+]
+
+
+[tool.mypy]
+files = "lazy"
+strict = true
+
+
+[tool.pylint.main]
+ignore = [".git"]
+ignore-patterns = ["^\\.#"]
+jobs = 0
+enable-all-extensions = true
+# load-plugins = [
+#     "pylint.extensions.bad_builtin",
+#     "pylint.extensions.check_elif",
+#     "pylint.extensions.code_style",
+#     "pylint.extensions.comparison_placement",
+#     "pylint.extensions.eq_without_hash",
+#     "pylint.extensions.for_any_all",
+#     "pylint.extensions.no_self_use",
+#     "pylint.extensions.overlapping_exceptions",
+#     "pylint.extensions.redefined_variable_type"
+# ]
+
+[tool.pylint.basic]
+# const-rgx = "[_a-zA-Z0-9][_a-zA-Z0-9]{3,30}"
+# function-rgx = "[_a-z0-9][_a-z0-9]{3,30}"
+
+[tool.pylint.design]
+# max-args = 15
+# max-attributes = 20
+# max-bool-expr = 5
+# max-branches = 40
+# max-locals = 40
+# max-parents = 7
+# max-public-methods = 50
+# max-returns = 6
+# max-statements = 200
+# min-public-methods = 2
+
+[tool.pylint.format]
+max-line-length = 131
+max-module-lines = 2000
+
+
+[tool.pylint."messages control"]
+# disable = [
+#     "consider-using-assignment-expr",
+#     "duplicate-code",
+#     "locally-disabled",
+#     "too-few-public-methods"
+# ]
+
+enable = [
+    "useless-suppression"
+]
+
+[tool.pylint.reports]
+output-format = "parseable"
+reports = false
+
+[tool.pylint.variables]
+# additional-builtins =
+# allow-global-unused-variables = true
+# allowed-redefined-builtins =
