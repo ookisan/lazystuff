@@ -72,6 +72,7 @@ strict = true
 strict_equality = false
 extra_checks = true
 no_implicit_reexport = true
+no_error_summary = true
 
 
 [tool.pylint.main]
@@ -93,3 +94,4 @@ enable = [
 [tool.pylint.reports]
 output-format = "parseable"
 reports = false
+score = false
