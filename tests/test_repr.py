@@ -1,6 +1,6 @@
 import re
 
-from lazy import lazylist
+from lazystuff import lazylist
 
 
 def test_repr_basic():

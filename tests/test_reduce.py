@@ -1,7 +1,7 @@
 import pickle
 import re
 
-from lazy import lazylist
+from lazystuff import lazylist
 
 
 def test_pickle_basic():

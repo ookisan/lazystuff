@@ -1,6 +1,6 @@
 import pytest
 
-from lazy import lazylist
+from lazystuff import lazylist
 
 
 @pytest.mark.parametrize('init,exp,strict', (

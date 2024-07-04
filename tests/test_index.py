@@ -2,7 +2,7 @@ import contextlib
 
 import pytest
 
-from lazy import lazylist
+from lazystuff import lazylist
 
 
 def _maybe_raises(exp, exc):

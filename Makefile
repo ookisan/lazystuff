@@ -1,4 +1,4 @@
-MODULE = lazy
+MODULE = lazystuff
 
 ifeq ($(ENV),)
 	FLAKE	   ?= flake8

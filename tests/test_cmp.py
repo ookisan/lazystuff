@@ -1,6 +1,6 @@
 import pytest
 
-from lazy import lazylist
+from lazystuff import lazylist
 
 
 def test_equal():
