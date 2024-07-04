@@ -194,7 +194,7 @@ class lazylist(collections.abc.MutableSequence[_T]):  # pylint:disable=invalid-n
         # If index is a negative integer, make everything strict
         index_value = index.__index__()
         if index_value < 0:
-            self._make_strict(None)
+            self._make_strict()
             return
 
         # If index is a non-negative integer, iterate to it
