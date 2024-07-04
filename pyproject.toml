@@ -76,33 +76,6 @@ ignore = [".git"]
 ignore-patterns = ["^\\.#"]
 jobs = 0
 enable-all-extensions = true
-# load-plugins = [
-#     "pylint.extensions.bad_builtin",
-#     "pylint.extensions.check_elif",
-#     "pylint.extensions.code_style",
-#     "pylint.extensions.comparison_placement",
-#     "pylint.extensions.eq_without_hash",
-#     "pylint.extensions.for_any_all",
-#     "pylint.extensions.no_self_use",
-#     "pylint.extensions.overlapping_exceptions",
-#     "pylint.extensions.redefined_variable_type"
-# ]
-
-[tool.pylint.basic]
-# const-rgx = "[_a-zA-Z0-9][_a-zA-Z0-9]{3,30}"
-# function-rgx = "[_a-z0-9][_a-z0-9]{3,30}"
-
-[tool.pylint.design]
-# max-args = 15
-# max-attributes = 20
-# max-bool-expr = 5
-# max-branches = 40
-# max-locals = 40
-# max-parents = 7
-# max-public-methods = 50
-# max-returns = 6
-# max-statements = 200
-# min-public-methods = 2
 
 [tool.pylint.format]
 max-line-length = 131
@@ -110,13 +83,6 @@ max-module-lines = 2000
 
 
 [tool.pylint."messages control"]
-# disable = [
-#     "consider-using-assignment-expr",
-#     "duplicate-code",
-#     "locally-disabled",
-#     "too-few-public-methods"
-# ]
-
 enable = [
     "useless-suppression"
 ]
@@ -124,8 +90,3 @@ enable = [
 [tool.pylint.reports]
 output-format = "parseable"
 reports = false
-
-[tool.pylint.variables]
-# additional-builtins =
-# allow-global-unused-variables = true
-# allowed-redefined-builtins =
