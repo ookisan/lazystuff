@@ -16,4 +16,8 @@
 
 """Lazy-ish evaluation of Python iterables."""
 
+__all__ = (
+    'lazylist',
+)
+
 from .lazylist import lazylist   # noqa;
