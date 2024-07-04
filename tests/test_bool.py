@@ -9,5 +9,4 @@ def test_nonempty_iterable():
     act = lazylist(range(1, 11))
     assert bool(act) is True
     assert act._strict == [1]
-    assert act._tail
-    assert not act._tails
+    assert len(act._tails) == 1

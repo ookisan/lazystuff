@@ -7,8 +7,7 @@ def test_positive():
     act = lazylist(range(1, 11))
     del act[3]
     assert act._strict == [1, 2, 3]
-    assert act._tail is not None
-    assert not act._tails
+    assert len(act._tails) == 1
     assert act[3] == 5
     assert act._strict == [1, 2, 3, 5]
 

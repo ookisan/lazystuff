@@ -8,19 +8,18 @@ def test_empty_init():
 def test_list_init():
     act = lazylist(list(range(1, 11)))
     assert act._strict == list(range(1, 11))
-    assert act._tail is None
-    assert not act._tails
+    assert len(act._tails) == 0
 
 def test_iterable_init():
     init = range(1, 11)
     act = lazylist(init)
     assert act._strict == []
-    assert type(act._tail) is type(iter(init))
-    assert not act._tails
+    assert len(act._tails) == 1
+    assert type(act._tails[0]) is type(iter(init))
 
 def test_iterator_init():
     init = iter(range(1, 11))
     act = lazylist(init)
     assert act._strict == []
-    assert act._tail is init
-    assert not act._tails
+    assert len(act._tails) == 1
+    assert act._tails[0] is init

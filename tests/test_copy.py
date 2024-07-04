@@ -6,8 +6,6 @@ def test_copy_empty():
     lst2 = lst1.copy()
     assert lst1 is not lst2
     assert lst1._strict is not lst2._strict
-    assert lst1._tail is None
-    assert lst2._tail is None
     assert lst1._tails is not lst2._tails
 
 def test_copy_strict():
@@ -17,8 +15,6 @@ def test_copy_strict():
     assert lst1._strict == [1, 2, 3]
     assert lst2._strict == [1, 2, 3]
     assert lst1._strict is not lst2._strict
-    assert lst1._tail is None
-    assert lst2._tail is None
     assert lst1._tails is not lst2._tails
 
 def test_copy_complex():
@@ -31,7 +27,6 @@ def test_copy_complex():
     assert lst1._strict == [1, 2, 3]
     assert lst2._strict == [1, 2, 3]
     assert lst1._strict is not lst2._strict
-    assert lst1._tail is not lst2._tail
     assert len(lst1._tails) == len(lst2._tails)
     assert not any(tail1 is tail2 for tail1, tail2 in zip(lst1._tails, lst2._tails))
     _ = list(lst2)

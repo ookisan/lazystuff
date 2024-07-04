@@ -8,5 +8,5 @@ def test_repr_basic():
     lst.extend(range(3, 5))
     lst.extend([5, 6])
     act = repr(lst)
-    assert re.match(r'<lazylist \[1, 2\] <range_iterator object at 0x[a-f0-9]+> \[\[5, 6\]\]>',
+    assert re.match(r'<lazylist \[1, 2\] \[<range_iterator object at 0x[a-f0-9]+>, \[5, 6\]\]>',
                     act)

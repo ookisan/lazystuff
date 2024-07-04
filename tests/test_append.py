@@ -27,13 +27,16 @@ def test_append_to_lazy():
     lst1 = lazylist(range(1, 5))
     lst1.append(5)
     assert lst1._strict == []
-    assert lst1._tails[0] == [5]
+    assert len(lst1._tails) == 2
+    assert lst1._tails[1] == [5]
 
 def test_append_to_lazy_multi():
     lst1 = lazylist(range(1, 5))
     lst1.append(5)
     assert lst1._strict == []
+    assert len(lst1._tails) == 2
     act = lst1._tails[0]
     lst1.append(6)
-    assert lst1._tails[0] == [5, 6]
+    assert len(lst1._tails) == 2
     assert lst1._tails[0] is act
+    assert lst1._tails[1] == [5, 6]

@@ -106,7 +106,6 @@ class lazylist(collections.abc.MutableSequence[_T]):  # pylint:disable=invalid-n
             return self
 
     _strict: list[_T]
-    _tail: Iterator[_T] | None
     _tails: collections.deque[Iterator[_T] | list[_T]]
 
     def __init__(self, iterable: Iterable[_T] | None = None) -> None:
@@ -122,7 +121,6 @@ class lazylist(collections.abc.MutableSequence[_T]):  # pylint:disable=invalid-n
 
         """
         self._strict = []
-        self._tail = None
         self._tails = collections.deque()
         if iterable is not None:
             self._add_tail(iterable)
@@ -133,8 +131,7 @@ class lazylist(collections.abc.MutableSequence[_T]):  # pylint:disable=invalid-n
             self._tails.append(other.copy())
         else:
             self._tails.append(iter(other))
-        if self._tail is None:
-            self._advance_tail()
+        self._advance_tail()
 
     def _advance_tail(self) -> None:
         """Advance to the next tail.
@@ -144,17 +141,12 @@ class lazylist(collections.abc.MutableSequence[_T]):  # pylint:disable=invalid-n
         retrieved.
 
         """
-        self._tail = None
-        while self._tails and self._tail is None:
-            tail = self._tails.popleft()
-            if isinstance(tail, list):
-                self._strict.extend(tail)
-            else:
-                self._tail = tail
+        while self._tails and isinstance(self._tails[0], list):
+            self._strict.extend(self._tails.popleft())
 
     def _is_strict(self) -> bool:
         """Check if all elements have been retrieved."""
-        return self._tail is None and not self._tails
+        return not self._tails
 
     def _make_strict(self, index: SupportsIndex | slice | None = None) -> None:
         """Make the lazylist strict up to a given index.
@@ -170,16 +162,14 @@ class lazylist(collections.abc.MutableSequence[_T]):  # pylint:disable=invalid-n
 
         """
         # Already strict
-        if self._tail is None:
+        if not self._tails:
             return
 
         # Special case
         if index is None:
-            self._tails.appendleft(self._tail)
             for tail in self._tails:
                 self._strict.extend(list(tail))
             self._tails.clear()
-            self._tail = None
             return
 
         # If index is a slice make start and and strict
@@ -198,10 +188,11 @@ class lazylist(collections.abc.MutableSequence[_T]):  # pylint:disable=invalid-n
             return
 
         # If index is a non-negative integer, iterate to it
-        while self._tail and len(self._strict) <= index_value:
+        while self._tails and len(self._strict) <= index_value:
             try:
-                self._strict.append(next(self._tail))
+                self._strict.append(next(self._tails[0]))  # type: ignore[arg-type]
             except StopIteration:
+                self._tails.popleft()
                 self._advance_tail()
 
     def __add__(self, other: Iterable[_T]) -> lazylist[_T]:
@@ -309,13 +300,10 @@ class lazylist(collections.abc.MutableSequence[_T]):  # pylint:disable=invalid-n
                     repetition.append(tail)
 
         _add_repetition(self._strict)
-        if self._tail is not None:
-            _add_repetition(self._tail)
         for tail in self._tails:
             _add_repetition(tail)
 
         self._strict = []
-        self._tail = None
         self._tails = collections.deque(item for repetition in repetitions for item in repetition)
         self._advance_tail()
         return self
@@ -359,7 +347,7 @@ class lazylist(collections.abc.MutableSequence[_T]):  # pylint:disable=invalid-n
 
     def __repr__(self) -> str:
         """Return a representation of this lazylist."""
-        return f'<lazylist {self._strict} {self._tail} {list(self._tails)}>'
+        return f'<lazylist {self._strict} {list(self._tails)}>'
 
     def __rmul__(self, other: int) -> lazylist[_T]:
         """Create a lazylist that is a repeat of this one."""
@@ -397,15 +385,12 @@ class lazylist(collections.abc.MutableSequence[_T]):  # pylint:disable=invalid-n
     def clear(self) -> None:
         """Clear this lazylist of all elements."""
         self._strict.clear()
-        self._tail = None
         self._tails.clear()
 
     def copy(self) -> lazylist[_T]:
         """Create a copy of this lazylist."""
         other: lazylist[_T] = lazylist()
         other._strict = self._strict.copy()  # pylint:disable=protected-access
-        if self._tail:
-            self._tail, other._tail = itertools.tee(self._tail)
         old_tails = self._tails
         self._tails = collections.deque()
         for item in old_tails:
@@ -454,13 +439,9 @@ class lazylist(collections.abc.MutableSequence[_T]):  # pylint:disable=invalid-n
     def reverse(self) -> None:
         """Reverse list lazylist."""
         old_strict = self._strict
-        old_tail = self._tail
         self._strict = []
-        self._tail = None
         self._tails = collections.deque(
             _lazy_reversed(tail) for tail in reversed(self._tails))
-        if old_tail:
-            self._tails.append(_lazy_reversed(old_tail))
         if old_strict:
             old_strict.reverse()
             self._tails.append(old_strict)

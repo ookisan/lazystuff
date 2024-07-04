@@ -60,7 +60,7 @@ iterators can be mixed::
     >>> print(example[3])
     1
     >>> del example[6]
-    >>> repr(example)
+    >>> print(example)
     ['a', 'b', 'c', 1, 2, 3, 'e', 'f']
 
 When the list is indexed with 3, a single element is fetched from the
@@ -74,23 +74,23 @@ to see the current status of the list::
     >>> example.extend(range(1, 4))
     >>> example.extend(string.ascii_lowercase[3:6])
     >>> repr(example)
-    "<lazylist ['a', 'b', 'c'] <range_iterator ...> [<str_ascii_iterator ...>]>"
+    "<lazylist ['a', 'b', 'c'] [<range_iterator ...> <str_ascii_iterator ...>]>"
     >>> print(example[3])
     1
     >>> repr(example)
-    "<lazylist ['a', 'b', 'c', 1] <range_iterator ...> [<str_ascii_iterator ...>]>"
+    "<lazylist ['a', 'b', 'c', 1] [<range_iterator ...> <str_ascii_iterator ...>]>"
     >>> del example[6]
     >>> repr(example)
-   "<lazylist ['a', 'b', 'c', 1, 2, 3] <str_ascii_iterator object at ...> []>"
+   "<lazylist ['a', 'b', 'c', 1, 2, 3] [<str_ascii_iterator object at ...>]>"
     >>> print(example)
     ['a', 'b', 'c', 1, 2, 3, 'e', 'f']
     >>> repr(example)
-    "<lazylist ['a', 'b', 'c', 1, 2, 3, 'e', 'f'] None []>"
+    "<lazylist ['a', 'b', 'c', 1, 2, 3, 'e', 'f'] []>"
 
-The first item is a list containing the elements that have been
-fetched. The second item is the iterator from which elements will be
-fetched next. The third item is a queue of subsequent iterables added
-to the list.
+The representation contains two elements: first the list of list
+elements that have been fetched from the iterators and second the list
+of iterators and regular lists that have been added to the
+:py:class:`lazylist`.
 
 :py:class:`lazylist` was originally developed to simplify streaming
 results from an API to a receiver with the goal that results should be

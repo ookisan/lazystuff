@@ -11,7 +11,6 @@ def test_pickle_basic():
     act = pickle.loads(pickle.dumps(lst))
     assert isinstance(act, lazylist)
     assert act._strict == [1, 2, 3, 4, 5, 6]
-    assert act._tail == None
     assert not act._tails
 
 def test_reduce():
