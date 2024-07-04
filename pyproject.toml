@@ -44,6 +44,9 @@ dev = [
 [tool.setuptools]
 packages = ["lazystuff"]
 
+[tool.setuptools.package-data]
+lazystuff = ["py.typed"]
+
 
 [tool.flake8]
 max-line-length = 131
