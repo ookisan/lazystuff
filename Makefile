@@ -52,5 +52,5 @@ test: pyproject.toml
 	PYTHONPATH=. $(PYTEST)
 
 clean:
-	find . -name '*~' -print | xargs rm
-	rm -r deb_dist dist *.egg-info build
+	find . -name '*~' -exec rm '{}' ';'
+	rm -rf deb_dist dist *.egg-info build
