@@ -38,6 +38,11 @@ if typing.TYPE_CHECKING:
     )  # pragma: no coverage
 
 
+__all__ = (
+    'lazylist',
+)
+
+
 class lazylist(collections.abc.MutableSequence[_T]):  # pylint:disable=invalid-name
     """List-like object that grows lazily.
 
