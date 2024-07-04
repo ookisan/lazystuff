@@ -31,7 +31,7 @@ build:
 
 check: lint test
 
-lint: vulture flake8 pydocstyle pylint 
+lint: vulture flake8 pydocstyle pylint mypy
 
 pylint: pyproject.toml
 	$(PYLINT) $(MODULE)
