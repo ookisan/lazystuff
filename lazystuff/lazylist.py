@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this package.  If not, see <https://www.gnu.org/licenses/>.
 
-"""Lazy-ish evaluation of Python iterables."""
+"""Lazy-ish list-like data structure."""
 
 from __future__ import annotations
 
