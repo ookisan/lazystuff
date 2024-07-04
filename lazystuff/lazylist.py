@@ -1,4 +1,4 @@
-# lazy -- "Lazy" evaluation utilities
+# lazystuff -- "Lazy" data structures for Python
 # Copyright (C) 2021-2024 David Byers
 #
 # This program is free software; you can redistribute it and/or modify
