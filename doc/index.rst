@@ -1,0 +1,4 @@
+lazystuff documentation
+=======================
+
+.. automodule:: lazystuff
