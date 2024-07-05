@@ -40,6 +40,8 @@ dev = [
 
 
 [project.urls]
+Homepage = "https://github.com/ookisan/lazystuff"
+Issues = "https://github.com/ookisan/lazystuff/issues"
 
 
 [tool.setuptools]
