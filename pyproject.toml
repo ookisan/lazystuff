@@ -3,7 +3,7 @@ requires = ["setuptools @ git+https://github.com/pypa/setuptools.git@main"]
 
 [project]
 name = "lazystuff"
-version = "1.0.1"
+version = "1.0.2"
 authors = [{ name = "David Byers", email = "david.byers@liu.se"}]
 description = "Lazy-ish list-like objects for streaming APIs."
 readme = "README.md"
