@@ -1,0 +1,71 @@
+name: Publish to TestPyPI
+
+on:
+  push:
+    tags:
+      - 'release-[0-9]+.[0-9]+.[0-9]+'
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    uses: .github/workflows/run-tests.yml
+  build:
+    runs-on: ubuntu-latest
+    needs: [tests]
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python 
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
+    - name: Install build
+      run: python -m pip install build --user
+    - name: Build packages
+      run: python3 -m build
+    - name: Store artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: python-package-distributions
+        path: dist/
+  publish-to-testpypi:
+    name: >-
+      Publish Python distribution to TestPyPI
+    needs:
+    - build
+    runs-on: ubuntu-latest
+    environment:
+      name: testpypi
+      url: https://test.pypi.org/p/lazystuff
+    permissions:
+      id-token: write  # Needed for trusted publishing
+    steps:
+    - name: Download all the dists
+      uses: actions/download-artifact@v3
+      with:
+        name: python-package-distributions
+        path: dist/
+    - name: Publish distribution to PyPI
+      uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        repository-url: https://test.pypi.org/legacy/      
+  publish-to-pypi:
+    name: >-
+      Publish Python distribution to PyPI
+    needs:
+    - build
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/lazystuff
+    permissions:
+      id-token: write  # Needed for trusted publishing
+    steps:
+    - name: Download all the dists
+      uses: actions/download-artifact@v3
+      with:
+        name: python-package-distributions
+        path: dist/
+    - name: Publish distribution to PyPI
+      uses: pypa/gh-action-pypi-publish@release/v1
