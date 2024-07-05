@@ -58,3 +58,4 @@ test: pyproject.toml
 clean:
 	find . -name '*~' -exec rm '{}' ';'
 	rm -rf deb_dist dist *.egg-info build
+	rm -rf doc/_build
