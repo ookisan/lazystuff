@@ -32,6 +32,7 @@ dev = [
     "sphinx",
     "sphinx-markdown-builder",
     "sphinx-rtd-theme",
+    "twine",
     "vulture",
     "wheel",
 ]
