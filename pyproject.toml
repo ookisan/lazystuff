@@ -17,7 +17,7 @@ classifiers = [
     "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Programming Language :: Python",
-    "Typing :: Untyped"
+    "Typing :: Typed"
 ]
 dependencies = []
 
