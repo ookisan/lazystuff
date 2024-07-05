@@ -7,7 +7,7 @@ version = "1.0.1"
 authors = [{ name = "David Byers", email = "david.byers@liu.se"}]
 description = "Lazy-ish list-like objects for streaming APIs."
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.9"
 keywords = ["lazy", "sequence"]
 license = { text = "AGPL-3.0-or-later" }
 classifiers = [
