@@ -101,7 +101,7 @@ class lazylist(collections.abc.MutableSequence[_T]):  # pylint:disable=invalid-n
             except IndexError:
                 raise StopIteration() from None
 
-        def __iter__(self) -> typing.Self:
+        def __iter__(self) -> Self:
             """Return self."""
             return self
 
