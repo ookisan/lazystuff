@@ -25,6 +25,7 @@ dev = [
     "Flake8-pyproject",
     "build",
     "flake8",
+    "mypy",
     "pydocstyle",
     "pylint",
     "pytest",
