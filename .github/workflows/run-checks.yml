@@ -26,4 +26,4 @@ jobs:
         mypy lazystuff
     - name: pytest
       run: |
-        pytest lazystuff
+        pytest
