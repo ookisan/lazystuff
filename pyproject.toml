@@ -30,6 +30,7 @@ dev = [
     "pytest",
     "pytest-cov",
     "sphinx",
+    "sphinx-markdown-builder",
     "sphinx-rtd-theme",
     "vulture",
     "wheel",

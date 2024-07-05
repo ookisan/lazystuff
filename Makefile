@@ -26,7 +26,11 @@ endif
 doc:
 	(cd doc && make SPHINXBUILD=$(SPHINX) html)
 
-build:
+README.md: doc/conf.py doc/index.rst
+	(cd doc && make SPHINXBUILD=$(SPHINX) markdown)
+	cp doc/_build/markdown/index.md README.md
+
+build: README.md
 	$(PYTHON) -m build
 
 check: lint test
