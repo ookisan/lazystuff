@@ -7,7 +7,7 @@ version = "1.0.0"
 authors = [{ name = "David Byers", email = "david.byers@liu.se"}]
 description = "Simplify cli tools with subcommands"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.12"
 keywords = ["lazy", "sequence"]
 license = { text = "AGPL-3.0-or-later" }
 classifiers = [
