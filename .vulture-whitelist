@@ -1,1 +1,3 @@
-protocol  # unused variable (lazy/lazylist.py:334)
+__init__  # unused function (lazystuff/lazydict.py:57)
+_.keys  # unused method (lazystuff/lazydict.py:114)
+protocol  # unused variable (lazystuff/lazylist.py:343)

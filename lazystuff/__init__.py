@@ -16,81 +16,11 @@
 
 """The :py:mod:`lazystuff` package provides lazy-ish list-like objects.
 
-This package implements a single data type, :py:class:`lazylist`, that
-behaves almost like a regular list. It has all the normal list methods
-and operators and they work as expected with a single exception.
-
-When a :py:class:`lazylist` is extended with an iterable other than a
-regular list, evaluation of the iterable is deferred until it is
-needed, and is limited to the number of elements required. The
-elements that are fetched from the iterator(s) are stored as a regular
-list inside the :py:class:`lazylist`.
-
-Iteration only takes place when an element is requested. For example:
-
-* When checking if the list is empty (or non-empty), a single element
-  is fetched.
-* When indexing the list using a positive number, elements are fetched
-  until the requested index is reached.
-* When the :py:meth:`index` method is called, elements are fetched
-  until the requested value is found.
-
-There are situations when all iterators are exhausted, including:
-
-* When the length of the list is requested.
-* When using the `in` operator and the value is not in the list.
-* When calling :py:meth:`index` with a value that is not in the list.
-* When the list is printed (all elements are printed).
-* When the list is indexed with a negative number.
-* When the :py:meth:`remove`, :py:meth:`count`, or :py:meth:`sort` methods are called.
-* When equal lists are compared.
-* When the list is pickled.
-
-For example, a :py:meth:`lazylist` can represent an infinite sequence::
-
-    all_squares = lazylist(x * x for x in itertools.count())
-    print(squares[99])  # Only iterates 100 times
-
-Multiple sequences can be added to a lazylist and regular lists and
-iterators can be mixed::
-
-    >>> example = lazylist(['a', 'b', 'c'])
-    >>> example.extend(range(1, 4))
-    >>> example.extend(string.ascii_lowercase[3:6])
-    >>> print(example[3])
-    1
-    >>> del example[6]
-    >>> print(example)
-    ['a', 'b', 'c', 1, 2, 3, 'e', 'f']
-
-When the list is indexed with 3, a single element is fetched from the
-range iterator. When element 6 is deleted, the range iterator is
-exhausted and a single element is fetched from the string iterator in
-order to reach the element at index 6. Finally, the string iterator is
-also exhausted when the list is printed. The :py:func:`repr` function
-to see the current status of the list::
-
-    >>> example = lazylist(['a', 'b', 'c'])
-    >>> example.extend(range(1, 4))
-    >>> example.extend(string.ascii_lowercase[3:6])
-    >>> repr(example)
-    "<lazylist ['a', 'b', 'c'] [<range_iterator ...> <str_ascii_iterator ...>]>"
-    >>> print(example[3])
-    1
-    >>> repr(example)
-    "<lazylist ['a', 'b', 'c', 1] [<range_iterator ...> <str_ascii_iterator ...>]>"
-    >>> del example[6]
-    >>> repr(example)
-   "<lazylist ['a', 'b', 'c', 1, 2, 3] [<str_ascii_iterator object at ...>]>"
-    >>> print(example)
-    ['a', 'b', 'c', 1, 2, 3, 'e', 'f']
-    >>> repr(example)
-    "<lazylist ['a', 'b', 'c', 1, 2, 3, 'e', 'f'] []>"
-
-The representation contains two elements: first the list of list
-elements that have been fetched from the iterators and second the list
-of iterators and regular lists that have been added to the
-:py:class:`lazylist`.
+This package implements a two data types: :py:class:`lazylist` and
+:py:class:`lazydict'. The main use of these types is in situations
+where a list or dictionary elemnt may be very expensive to calculate,
+but might never be used (or only partially used), but the user expects
+something that behaves like a list or dictionary.
 
 :py:class:`lazylist` was originally developed to simplify streaming
 results from an API to a receiver with the goal that results should be
@@ -124,10 +54,17 @@ Additional `tee` iterators would be needed if the results were to be
 processed multiple times, and it would be impossible to perform
 indexed access on the results, which is sometimes a requirement.
 
+:py:class:`lazydict` was developed for a similar situation, where
+certain dictionary elements were calculated by making expensive API
+calls, but were not always used. By deferring calculating to the first
+access, the calls would only be made if necessary.
+
 """
 
 __all__ = (
     'lazylist',
+    'lazydict',
 )
 
 from .lazylist import lazylist   # noqa;
+from .lazydict import lazydict   # noqa;

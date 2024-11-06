@@ -97,6 +97,9 @@ max-module-lines = 2000
 enable = [
     "useless-suppression"
 ]
+disable = [
+    "duplicate-code"
+]
 
 [tool.pylint.reports]
 output-format = "parseable"
