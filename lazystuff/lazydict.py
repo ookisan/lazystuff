@@ -46,9 +46,9 @@ class lazydict(collections.abc.MutableMapping[_K, _V]):  # pylint:disable=invali
     """Dict-like object where computation of values can be deferred.
 
     Objects of this class behave more or less like dictionaries, but
-    when initialized (and only when initialized), callable values have
-    a special meaning: they will be called on first access to the
-    associated key.
+    when initialized or updated from another :py:class:`lazydict` (and
+    only in those cases), callable values have a special meaning: they
+    will be called on first access to the associated key.
 
     For example::
 
@@ -80,10 +80,45 @@ class lazydict(collections.abc.MutableMapping[_K, _V]):  # pylint:disable=invali
     structure that can be used as if all values are present, but in
     reality the expensive computation is deferred until needed.
 
+    When :py:meth:`lazydict.update` is called with a
+    :py:class:`lazydict` as the argument, the deferred values will
+    remain deferred. Note that in this case the callable is copied.
+    When the value is accessed in one :py:class:`lazydict` instance it
+    remains deferred in all others.
+
     """
 
     _resolved: dict[_K, _V]
     _unresolved: dict[_K, Callable[[], _V]]
+
+    def _update_from_iterable(self, arg: Iterable[Any] | None, init: bool) -> None:
+        """Initialize lazydict from iterable."""
+        if isinstance(arg, dict):
+            self._update_from_iterable(arg.items(), init)
+        elif isinstance(arg, lazydict):
+            self._resolved.update(arg._resolved)  # pylint:disable=protected-access
+            self._unresolved.update(arg._unresolved)  # pylint:disable=protected-access
+        elif arg:
+            for index, item in enumerate(arg):
+                elem = list(item)
+                if len(elem) != 2:
+                    raise ValueError(
+                        f'dictionary update sequence element #{index} has '
+                        f'length {len(elem)}; 2 is required')
+                key, value = elem
+                if callable(value):
+                    if init:
+                        self._unresolved[key] = value
+                        self._resolved[key] = None  # type: ignore
+                    else:
+                        self[key] = value()
+                else:
+                    self[key] = value
+
+    def _update(self, arg: Iterable[Any] | None, kwargs: dict[str, Any] | None, init: bool) -> None:
+        """Update or initialize this mapping."""
+        self._update_from_iterable(arg, init)
+        self._update_from_iterable(kwargs, init)
 
     def __init__(self, /, *args: Iterable[Any], **kwargs: Any) -> None:
         """Initialize the lazydict structure.
@@ -92,35 +127,11 @@ class lazydict(collections.abc.MutableMapping[_K, _V]):  # pylint:disable=invali
         that are callable will be called on first access.
 
         """
-        def _enumerate(sequence: Iterable[Any]) -> enumerate[Any]:
-            if isinstance(sequence, dict):
-                return enumerate(sequence.items())
-            return enumerate(sequence)
-
         if len(args) > 1:
             raise TypeError(f'lazydict expected at most 1 argument, got {len(args)}')
         self._resolved = {}
         self._unresolved = {}
-        if args:
-            for index, item in _enumerate(args[0]):
-                init = list(item)
-                if len(init) != 2:
-                    raise ValueError(
-                        f'dictionary update sequence element #{index} has '
-                        f'length {len(init)}; 2 is required')
-                key, value = init
-                if callable(value):
-                    self._unresolved[key] = value
-                    self._resolved[key] = None  # type: ignore
-                else:
-                    self._resolved[key] = value
-        if kwargs:
-            for key, value in kwargs.items():
-                if callable(value):
-                    self._unresolved[key] = value
-                    self._resolved[key] = None  # type: ignore
-                else:
-                    self._resolved[key] = value
+        self._update(args[0] if args else None, kwargs, True)
 
     def __getitem__(self, key: _K) -> _V:
         """Get the value of key."""
@@ -160,3 +171,17 @@ class lazydict(collections.abc.MutableMapping[_K, _V]):  # pylint:disable=invali
     def values(self) -> ValuesView[_V]:
         """Get mapping values."""
         return collections.abc.ValuesView(self)
+
+    # It does not appear to be possible to type this method correctly
+    # since one of the protocols used is in _typeshed.
+
+    def update(self, /, *args: Iterable[Any], **kwargs: Any) -> None:  # type: ignore
+        """Update values from other mapping.
+
+        When updating from another lazydict, any deferred values
+        remain deferred.
+
+        """
+        if len(args) > 1:
+            raise TypeError(f'update expected at most 1 argument, got {len(args)}')
+        self._update(args[0] if args else None, kwargs, False)
